@@ -124,10 +124,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ClassRaquelModifyByAlejandro.cs" />
-    <Compile Include="Models\ModeloPruebaforGit.cs" />
-    <Compile Include="Models\PreuebaAndreaLaMaja.cs" />
-    <Compile Include="Models\Prueba.cs" />
+    <Compile Include="Models\Jaulas.cs" />
+    <Compile Include="Models\Perros.cs" />
+    <Compile Include="Models\Razas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AdopcionesViewModel.cs" />
     <Compile Include="ViewModels\ClientesViewModel.cs" />
