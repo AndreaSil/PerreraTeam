@@ -124,7 +124,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Class1.cs" />
+    <Compile Include="Models\ClassRaquelModifyByAlejandro.cs" />
     <Compile Include="Models\ModeloPruebaforGit.cs" />
     <Compile Include="Models\PreuebaAndreaLaMaja.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
