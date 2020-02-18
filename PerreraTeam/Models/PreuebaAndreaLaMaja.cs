@@ -7,5 +7,6 @@ namespace PerreraTeam.Models
 {
     public class PreuebaAndreaLaMaja
     {
+        public string EsoDeMajaBuenooooooo { get; set; }
     }
 }
