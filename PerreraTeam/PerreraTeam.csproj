@@ -127,6 +127,7 @@
     <Compile Include="Models\ClassRaquel.cs" />
     <Compile Include="Models\ModeloPruebaforGit.cs" />
     <Compile Include="Models\PreuebaAndreaLaMaja.cs" />
+    <Compile Include="Models\Prueba.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
