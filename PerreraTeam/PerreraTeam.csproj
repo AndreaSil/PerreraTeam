@@ -147,6 +147,9 @@
     <Compile Include="ViewModels\AdopcionesViewModel.cs" />
     <Compile Include="ViewModels\ClientesViewModel.cs" />
     <Compile Include="ViewModels\EmpleadosViewModel.cs" />
+    <Compile Include="ViewModels\JaulasViewModel.cs" />
+    <Compile Include="ViewModels\PerrosViewModel.cs" />
+    <Compile Include="ViewModels\RazasViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
