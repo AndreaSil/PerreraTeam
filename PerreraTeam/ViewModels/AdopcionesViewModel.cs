@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using PerreraTeam.Models;
 
 namespace PerreraTeam.ViewModels
 {
@@ -16,6 +17,6 @@ namespace PerreraTeam.ViewModels
 
         //public virtual Clientes Clientes { get; set; }
        // public virtual Empleados Empleados { get; set; }
-       // public virtual Perros Perros { get; set; }
+        public virtual Perros Perros { get; set; }
     }
 }

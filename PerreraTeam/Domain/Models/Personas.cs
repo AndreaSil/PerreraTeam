@@ -24,7 +24,6 @@ namespace PerreraTeam.Domain.Models
         [RegularExpression(@"(^[0-9]{8})([-]?)([A-Za-z]{1})$", ErrorMessage = "El DNI debe ser válido")]
         public string DNI { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Adopciones> Adopciones { get; set; }
     }
 }
