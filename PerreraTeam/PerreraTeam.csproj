@@ -132,6 +132,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdopcionesController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\EmpleadosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -142,11 +143,6 @@
     <Compile Include="Domain\Models\Clientes.cs" />
     <Compile Include="Domain\Models\Empleados.cs" />
     <Compile Include="Domain\Models\Jaulas.cs" />
-    <Compile Include="Domain\Models\Model1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Domain\Models\Perros.cs" />
     <Compile Include="Domain\Models\Personas.cs" />
     <Compile Include="Domain\Models\Razas.cs" />
@@ -155,8 +151,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AdopcionesRepository.cs" />
     <Compile Include="Services\GenericRepository.cs" />
+    <Compile Include="Services\IAdopcionesRepository.cs" />
     <Compile Include="Services\IGenericRepository.cs" />
+    <Compile Include="Services\IPerrosRepository.cs" />
+    <Compile Include="Services\PerrosRepository.cs" />
     <Compile Include="ViewModels\AdopcionesViewModel.cs" />
     <Compile Include="ViewModels\ClientesViewModel.cs" />
     <Compile Include="ViewModels\EmpleadosViewModel.cs" />
@@ -175,13 +175,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Domain\Models\Model1.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Domain\Models\Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
-    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

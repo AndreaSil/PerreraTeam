@@ -5,53 +5,70 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Data.Entity;
+using System.Net;
+using System.Web.Mvc;
 using PerreraTeam.Domain;
 
 namespace PerreraTeam.Services
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private PerreraContext _dbContext = null;
-        private DbSet<T> table = null;
+        public PerreraContext DbContext = null;
+        public DbSet<T> Table = null;
 
         public GenericRepository()
         {
-            _dbContext = new PerreraContext();
-            table = _dbContext.Set<T>();
+            DbContext = new PerreraContext();
+            Table = DbContext.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public GenericRepository(PerreraContext context)
         {
-            var lista = await Task.Run(() => table.ToList()
-            );
-            return lista;
-
-        }
-        public async Task<T> GetById(object id)
-        {
-            var obj = await Task.Run(() => table.Find(id));
-            return obj;
-        }
-        public async void Insert(T obj)
-        {
-            await Task.Run(() => table.Add(obj));
+            DbContext = context;
+            Table = DbContext.Set<T>();
         }
 
-        public async void Update(T obj)
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
-            await Task.Run(() => table.Attach(obj));
-            _dbContext.Entry(obj).State = EntityState.Modified;
+            return await Table.ToListAsync().ConfigureAwait(false);
+        }
+
+        public async Task<T> GetElement(params object[] keys)
+        {
+            if (keys.Any(id => id == null))
+            {
+                //log with HttpStatusCode.BadRequest
+                //ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                return null;
+            }
+            return await Table.FindAsync(keys);
+        }
+
+        public void Insert(T obj)
+        {
+            Table.Add(obj);
+        }
+
+        public void Update(T obj)
+        {
+            Table.Attach(obj);
+            DbContext.Entry(obj).State = EntityState.Modified;
         }
 
         public async void Delete(object id)
         {
-            var obj = await Task.Run(() => table.Find(id));
-            await Task.Run(() => table.Remove(obj));
-
+            var obj = await Task.Run(() => Table.Find(id)).ConfigureAwait(false);
+            await Task.Run(() => Table.Remove(obj));
         }
-        public void Save()
+
+        public void Delete(T item)
         {
-            _dbContext.SaveChanges();
+            Table.Remove(item);
+        }
+
+        public async Task Save()
+        {
+            await DbContext.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }

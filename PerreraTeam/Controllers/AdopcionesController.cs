@@ -9,28 +9,38 @@ using System.Web;
 using System.Web.Mvc;
 using PerreraTeam.Domain;
 using PerreraTeam.Domain.Models;
+using PerreraTeam.Services;
 
 namespace PerreraTeam.Controllers
 {
     public class AdopcionesController : Controller
     {
-        private PerreraContext db = new PerreraContext();
+        private IAdopcionesRepository _repository = null;
+
+        public AdopcionesController()
+        {
+            _repository = new AdopcionesRepository();
+        }
+
+        public AdopcionesController(IAdopcionesRepository repository)
+        {
+            _repository = repository;
+        }
 
         // GET: Adopciones
         public async Task<ActionResult> Index()
         {
-            var adopciones = db.Adopciones.Include(a => a.Clientes).Include(a => a.Empleados).Include(a => a.Perros);
-            return View(await adopciones.ToListAsync());
+            return View(await _repository.GetAll().ConfigureAwait(false));
         }
 
         // GET: Adopciones/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public async Task<ActionResult> Details(int? idCliente, int? idEmpleado, int? idPerro, DateTime? fecha)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Adopciones adopciones = await db.Adopciones.FindAsync(id);
+            //if (adopciones == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var adopciones = await _repository.GetElement(idCliente, idEmpleado, idPerro, fecha).ConfigureAwait(false);
             if (adopciones == null)
             {
                 return HttpNotFound();
@@ -41,9 +51,9 @@ namespace PerreraTeam.Controllers
         // GET: Adopciones/Create
         public ActionResult Create()
         {
-            ViewBag.ClienteId = new SelectList(db.Clientes, "Id", "NombreCompleto");
-            ViewBag.EmpleadoId = new SelectList(db.Empleados, "Id", "NombreCompleto");
-            ViewBag.PerroId = new SelectList(db.Perros, "Id", "Nombre");
+            ViewBag.ClienteId = new SelectList(_repository.GetContext().Clientes, "Id", "NombreCompleto");
+            ViewBag.EmpleadoId = new SelectList(_repository.GetContext().Empleados, "Id", "NombreCompleto");
+            ViewBag.PerroId = new SelectList(_repository.GetContext().Perros, "Id", "Nombre");
             return View();
         }
 
@@ -56,32 +66,32 @@ namespace PerreraTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Adopciones.Add(adopciones);
-                await db.SaveChangesAsync();
+                _repository.Insert(adopciones);
+                await _repository.Save().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ClienteId = new SelectList(db.Clientes, "Id", "NombreCompleto", adopciones.ClienteId);
-            ViewBag.EmpleadoId = new SelectList(db.Empleados, "Id", "NombreCompleto", adopciones.EmpleadoId);
-            ViewBag.PerroId = new SelectList(db.Perros, "Id", "Nombre", adopciones.PerroId);
+            ViewBag.ClienteId = new SelectList(_repository.GetContext().Clientes, "Id", "NombreCompleto", adopciones.ClienteId);
+            ViewBag.EmpleadoId = new SelectList(_repository.GetContext().Empleados, "Id", "NombreCompleto", adopciones.EmpleadoId);
+            ViewBag.PerroId = new SelectList(_repository.GetContext().Perros, "Id", "Nombre", adopciones.PerroId);
             return View(adopciones);
         }
 
         // GET: Adopciones/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public async Task<ActionResult> Edit(int? idCliente, int? idEmpleado, int? idPerro, DateTime? fecha)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Adopciones adopciones = await db.Adopciones.FindAsync(id);
+            //if (item == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var adopciones = await _repository.GetElement(idCliente, idEmpleado, idPerro, fecha).ConfigureAwait(false);
             if (adopciones == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ClienteId = new SelectList(db.Clientes, "Id", "NombreCompleto", adopciones.ClienteId);
-            ViewBag.EmpleadoId = new SelectList(db.Empleados, "Id", "NombreCompleto", adopciones.EmpleadoId);
-            ViewBag.PerroId = new SelectList(db.Perros, "Id", "Nombre", adopciones.PerroId);
+            ViewBag.ClienteId = new SelectList(_repository.GetContext().Clientes, "Id", "NombreCompleto", adopciones.ClienteId);
+            ViewBag.EmpleadoId = new SelectList(_repository.GetContext().Empleados, "Id", "NombreCompleto", adopciones.EmpleadoId);
+            ViewBag.PerroId = new SelectList(_repository.GetContext().Perros, "Id", "Nombre", adopciones.PerroId);
             return View(adopciones);
         }
 
@@ -90,28 +100,28 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "PerroId,ClienteId,EmpleadoId,FechaEntrega")] Adopciones adopciones)
+        public async Task<ActionResult> Edit([Bind(Include = "PerroId,EmpleadoId,ClienteId,FechaEntrega")] Adopciones adopciones)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(adopciones).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _repository.Update(adopciones);
+                await _repository.Save().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
-            ViewBag.ClienteId = new SelectList(db.Clientes, "Id", "NombreCompleto", adopciones.ClienteId);
-            ViewBag.EmpleadoId = new SelectList(db.Empleados, "Id", "NombreCompleto", adopciones.EmpleadoId);
-            ViewBag.PerroId = new SelectList(db.Perros, "Id", "Nombre", adopciones.PerroId);
+            ViewBag.ClienteId = new SelectList(_repository.GetContext().Clientes, "Id", "NombreCompleto", adopciones.ClienteId);
+            ViewBag.EmpleadoId = new SelectList(_repository.GetContext().Empleados, "Id", "NombreCompleto", adopciones.EmpleadoId);
+            ViewBag.PerroId = new SelectList(_repository.GetContext().Perros, "Id", "Nombre", adopciones.PerroId);
             return View(adopciones);
         }
 
         // GET: Adopciones/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public async Task<ActionResult> Delete(int? idCliente, int? idEmpleado, int? idPerro, DateTime? fecha)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Adopciones adopciones = await db.Adopciones.FindAsync(id);
+            //if (adopciones == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var adopciones = await _repository.GetElement(idCliente, idEmpleado, idPerro, fecha).ConfigureAwait(false);
             if (adopciones == null)
             {
                 return HttpNotFound();
@@ -122,21 +132,12 @@ namespace PerreraTeam.Controllers
         // POST: Adopciones/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int? idCliente, int? idEmpleado, int? idPerro, DateTime? fecha)
         {
-            Adopciones adopciones = await db.Adopciones.FindAsync(id);
-            db.Adopciones.Remove(adopciones);
-            await db.SaveChangesAsync();
+            var adopciones = await _repository.GetElement(idCliente, idEmpleado, idPerro, fecha).ConfigureAwait(false);
+            _repository.Delete(adopciones);
+            await _repository.Save().ConfigureAwait(false);
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

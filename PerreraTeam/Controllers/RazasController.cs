@@ -9,27 +9,40 @@ using System.Web;
 using System.Web.Mvc;
 using PerreraTeam.Domain;
 using PerreraTeam.Domain.Models;
+using PerreraTeam.Services;
 
 namespace PerreraTeam.Controllers
 {
     public class RazasController : Controller
     {
-        private PerreraContext db = new PerreraContext();
+        private readonly IGenericRepository<Razas> _repository = null;
+
+        public RazasController()
+        {
+            _repository = new GenericRepository<Razas>();
+        }
+
+        public RazasController(IGenericRepository<Razas> repository)
+        {
+            _repository = repository;
+        }
+
 
         // GET: Razas
         public async Task<ActionResult> Index()
         {
-            return View(await db.Razas.ToListAsync());
+            var model = await _repository.GetAll().ConfigureAwait(false);
+            return View(model);
         }
 
         // GET: Razas/Details/5
         public async Task<ActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Razas razas = await db.Razas.FindAsync(id);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var razas = await _repository.GetElement(id).ConfigureAwait(false);
             if (razas == null)
             {
                 return HttpNotFound();
@@ -48,12 +61,12 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Nombre")] Razas razas)
+        public async Task<ActionResult> Create([Bind(Include = "Nombre")] Razas razas)
         {
             if (ModelState.IsValid)
             {
-                db.Razas.Add(razas);
-                await db.SaveChangesAsync();
+                _repository.Insert(razas);
+                await _repository.Save().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
 
@@ -63,11 +76,11 @@ namespace PerreraTeam.Controllers
         // GET: Razas/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Razas razas = await db.Razas.FindAsync(id);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var razas = await _repository.GetElement(id).ConfigureAwait(false);
             if (razas == null)
             {
                 return HttpNotFound();
@@ -80,12 +93,12 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Nombre")] Razas razas)
+        public async Task<ActionResult> Edit([Bind(Include = "Nombre")] Razas razas)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(razas).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _repository.Update(razas);
+                await _repository.Save().ConfigureAwait(false);
                 return RedirectToAction("Index");
             }
             return View(razas);
@@ -94,11 +107,11 @@ namespace PerreraTeam.Controllers
         // GET: Razas/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Razas razas = await db.Razas.FindAsync(id);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var razas = await _repository.GetElement(id);
             if (razas == null)
             {
                 return HttpNotFound();
@@ -111,19 +124,10 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Razas razas = await db.Razas.FindAsync(id);
-            db.Razas.Remove(razas);
-            await db.SaveChangesAsync();
+            _repository.Delete(id);
+            await _repository.Save().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }
