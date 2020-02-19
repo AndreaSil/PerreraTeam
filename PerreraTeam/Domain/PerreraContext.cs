@@ -21,5 +21,7 @@ namespace PerreraTeam.Domain
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
+
+        public System.Data.Entity.DbSet<PerreraTeam.Domain.Models.Adopciones> Adopciones { get; set; }
     }
 }
