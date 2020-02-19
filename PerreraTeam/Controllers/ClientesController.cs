@@ -19,7 +19,7 @@ namespace PerreraTeam.Controllers
         // GET: Clientes
         public async Task<ActionResult> Index()
         {
-            return View(await db.Personas.ToListAsync());
+            return View(await db.Clientes.ToListAsync());
         }
 
         // GET: Clientes/Details/5
@@ -29,7 +29,7 @@ namespace PerreraTeam.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Clientes clientes = await db.Personas.FindAsync(id);
+            var clientes = await db.Clientes.FindAsync(id);
             if (clientes == null)
             {
                 return HttpNotFound();
@@ -67,7 +67,7 @@ namespace PerreraTeam.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Clientes clientes = await db.Personas.FindAsync(id);
+            var clientes = await db.Clientes.FindAsync(id);
             if (clientes == null)
             {
                 return HttpNotFound();
@@ -98,7 +98,7 @@ namespace PerreraTeam.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Clientes clientes = await db.Personas.FindAsync(id);
+            var clientes = await db.Clientes.FindAsync(id);
             if (clientes == null)
             {
                 return HttpNotFound();
@@ -111,7 +111,7 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Clientes clientes = await db.Personas.FindAsync(id);
+            var clientes = await db.Clientes.FindAsync(id);
             db.Personas.Remove(clientes);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

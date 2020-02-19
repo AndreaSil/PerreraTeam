@@ -19,7 +19,7 @@ namespace PerreraTeam.Controllers
         // GET: Empleados
         public async Task<ActionResult> Index()
         {
-            return View(await db.Personas.ToListAsync());
+            return View(await db.Empleados.ToListAsync());
         }
 
         // GET: Empleados/Details/5
@@ -29,7 +29,7 @@ namespace PerreraTeam.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Empleados empleados = await db.Personas.FindAsync(id);
+            var empleados = await db.Empleados.FindAsync(id);
             if (empleados == null)
             {
                 return HttpNotFound();
@@ -67,7 +67,7 @@ namespace PerreraTeam.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Empleados empleados = await db.Personas.FindAsync(id);
+            var empleados = await db.Empleados.FindAsync(id);
             if (empleados == null)
             {
                 return HttpNotFound();
@@ -98,7 +98,7 @@ namespace PerreraTeam.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Empleados empleados = await db.Personas.FindAsync(id);
+            var empleados = await db.Empleados.FindAsync(id);
             if (empleados == null)
             {
                 return HttpNotFound();
@@ -111,7 +111,7 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Empleados empleados = await db.Personas.FindAsync(id);
+            var empleados = await db.Empleados.FindAsync(id);
             db.Personas.Remove(empleados);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
