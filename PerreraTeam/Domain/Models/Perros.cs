@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,6 +12,7 @@ namespace PerreraTeam.Domain.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Ha de indicar un nombre para el perro")]
+        [DisplayName("Nombre Perro")]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "Indique el Chip del perro")]
