@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using PerreraTeam.Domain.Models;
 
 namespace PerreraTeam.ViewModels
 {
@@ -22,9 +23,9 @@ namespace PerreraTeam.ViewModels
         [RegularExpression("^[0-9]{8,8}[A-Za-z]$"),]
         public string DNI { get; set; }
 
-     //   [System.Diagnostics.CodeAnalysis.
-      //      SuppressMessage("Microsoft.Usage",
-      //          "CA2227:CollectionPropertiesShouldBeReadOnly")]
-      //  public virtual ICollection<Adopciones> Adopciones { get; set; }
+        [System.Diagnostics.CodeAnalysis.
+            SuppressMessage("Microsoft.Usage",
+                "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Adopciones> Adopciones { get; set; }
     }
 }
