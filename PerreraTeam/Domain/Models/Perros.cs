@@ -30,7 +30,6 @@ namespace PerreraTeam.Domain.Models
         [Required(ErrorMessage = "Código de jaula")]
         public Nullable<int> IdJaula { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Adopciones> Adopciones { get; set; }
         public virtual Jaulas Jaulas { get; set; }
         public virtual Razas Razas { get; set; }
