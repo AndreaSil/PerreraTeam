@@ -26,10 +26,12 @@ namespace PerreraTeam.ViewModels
         public Nullable<System.DateTime> FechaNacimiento { get; set; }
 
         [Required(ErrorMessage = "Código de raza del perro")]
+        [DisplayFormat(NullDisplayText = "Desconocida")]
         public Nullable<int> CodRazaId { get; set; }
 
        
         [Required(ErrorMessage = "Código de jaula")]
+        [DisplayFormat(NullDisplayText = "Desconocida")]
         public Nullable<int> IdJaula { get; set; }
 
         public virtual ICollection<Adopciones> Adopciones { get; set; }
