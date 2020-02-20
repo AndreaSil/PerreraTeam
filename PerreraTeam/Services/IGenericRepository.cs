@@ -12,7 +12,7 @@ namespace PerreraTeam.Services
         Task<T> GetElement(params object[] keys);
         void Insert(T obj);
         void Update(T obj);
-        void Delete(object id);
+        Task Delete(object id);
         void Delete(T obj);
         Task Save();
     }

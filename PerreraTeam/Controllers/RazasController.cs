@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using PerreraTeam.Domain;
 using PerreraTeam.Domain.Models;
 using PerreraTeam.Services;
 
@@ -63,14 +55,9 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Nombre")] Razas razas)
         {
-            if (ModelState.IsValid)
-            {
-                _repository.Insert(razas);
-                await _repository.Save().ConfigureAwait(false);
-                return RedirectToAction("Index");
-            }
-
-            return View(razas);
+            if (!ModelState.IsValid) return View(razas);
+            _repository.Insert(razas);
+            return RedirectToAction("Index");
         }
 
         // GET: Razas/Edit/5
@@ -95,13 +82,9 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Nombre")] Razas razas)
         {
-            if (ModelState.IsValid)
-            {
-                _repository.Update(razas);
-                await _repository.Save().ConfigureAwait(false);
-                return RedirectToAction("Index");
-            }
-            return View(razas);
+            if (!ModelState.IsValid) return View(razas);
+            _repository.Update(razas);
+            return RedirectToAction("Index");
         }
 
         // GET: Razas/Delete/5
@@ -124,8 +107,7 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            _repository.Delete(id);
-            await _repository.Save().ConfigureAwait(false);
+            await _repository.Delete(id).ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 
