@@ -16,12 +16,14 @@ namespace PerreraTeam.Domain
         public DbSet<Clientes> Clientes { get; set; }
         public DbSet<Empleados> Empleados { get; set; }
         public DbSet<Personas> Personas { get; set; }
+        public DbSet<Adopciones> Adopciones { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            //modelBuilder.Entity<Adopciones>().HasKey(c => new {c.ClienteId, c.EmpleadoId, c.PerroId,c.FechaEntrega}); // Clave primaria de Adopciones
         }
 
-        public System.Data.Entity.DbSet<PerreraTeam.Domain.Models.Adopciones> Adopciones { get; set; }
+        
     }
 }

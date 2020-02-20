@@ -33,10 +33,10 @@ namespace PerreraTeam.Domain
 
             var perros = new List<Perros>
             {
-            new Perros(){Nombre = "Toby",Chip = "01",FechaNacimiento = new DateTime(2011,03,13),Razas = razas[0],Jaulas = jaulas[0]},
-            new Perros(){Nombre = "Scar",Chip = "02",FechaNacimiento = new DateTime(2012,04,14),Razas = razas[1],Jaulas = jaulas[0]},
-            new Perros(){Nombre = "Pere",Chip = "03",FechaNacimiento = new DateTime(2013,05,15),Razas = razas[2],Jaulas = jaulas[1]},
-            new Perros(){Nombre = "Soso",Chip = "04",FechaNacimiento = new DateTime(2014,06,16),Razas = razas[3],Jaulas = jaulas[1]},
+            new Perros(){Nombre = "Toby",Chip = "01ABHGIUTO",FechaNacimiento = new DateTime(2011,03,13),Razas = razas[0],Jaulas = jaulas[0]},
+            new Perros(){Nombre = "Scar",Chip = "02ABHGIUTO",FechaNacimiento = new DateTime(2012,04,14),Razas = razas[1],Jaulas = jaulas[0]},
+            new Perros(){Nombre = "Pere",Chip = "03ABHGIUTO",FechaNacimiento = new DateTime(2013,05,15),Razas = razas[2],Jaulas = jaulas[1]},
+            new Perros(){Nombre = "Soso",Chip = "04ABHGIUTO",FechaNacimiento = new DateTime(2014,06,16),Razas = razas[3],Jaulas = jaulas[1]},
 
             };
             perros.ForEach(p => context.Perros.Add(p));
@@ -66,9 +66,9 @@ namespace PerreraTeam.Domain
 
             var adopciones = new List<Adopciones>
             {
-                new Adopciones(){ClienteId = clientes[0].Id,EmpleadoId = empleados[0].Id,FechaEntrega = new DateTime(2015,01,15)},
-                new Adopciones(){ClienteId = clientes[1].Id,EmpleadoId = empleados[1].Id,FechaEntrega = new DateTime(2016,02,16)},
-                new Adopciones(){ClienteId = clientes[2].Id,EmpleadoId = empleados[2].Id,FechaEntrega = new DateTime(2017,03,17)},
+                new Adopciones(){ClienteId = 1,EmpleadoId = 1,PerroId = 1,FechaEntrega = new DateTime(2015,01,15)},
+                new Adopciones(){ClienteId = 2,EmpleadoId = 2,PerroId = 2,FechaEntrega = new DateTime(2016,02,16)},
+                new Adopciones(){ClienteId = 3,EmpleadoId = 3,PerroId = 3,FechaEntrega = new DateTime(2017,03,17)},
             };
 
             adopciones.ForEach(a => context.Adopciones.Add(a));
