@@ -11,8 +11,8 @@ namespace PerreraTeam.Services.Repository
     {
         public override async Task<IEnumerable<Perros>> GetAll()
         {
-            var perros = await Table.Include(a => a.Razas)
-                .Include(a => a.Jaulas).ToListAsync()
+            var perros = await Table.Include(a => a.Raza)
+                .Include(a => a.Jaula).ToListAsync()
                 .ConfigureAwait(false);
             return perros.OrderBy(x => x.Nombre);
         }

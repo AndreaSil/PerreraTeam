@@ -21,7 +21,7 @@ namespace PerreraTeam.Domain
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            //modelBuilder.Entity<Adopciones>().HasKey(c => new {c.ClienteId, c.EmpleadoId, c.PerroId,c.FechaEntrega}); // Clave primaria de Adopciones
+            modelBuilder.Entity<Adopciones>().HasKey(c => new {c.ClienteId, c.EmpleadoId, c.PerroId,c.FechaEntrega}); // Clave primaria de Adopciones
         }
 
         

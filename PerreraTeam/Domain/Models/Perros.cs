@@ -26,14 +26,14 @@ namespace PerreraTeam.Domain.Models
 
         [Required(ErrorMessage = "Código de raza del perro")]
         [DisplayFormat(NullDisplayText = "-Desconocida-")]
-        public Nullable<int> CodRazaId { get; set; }
+        public Nullable<int> RazaId { get; set; }
 
         [Required(ErrorMessage = "Código de jaula")]
         [DisplayFormat(NullDisplayText = "-Desconocida-")]
-        public Nullable<int> IdJaula { get; set; }
+        public Nullable<int> JaulaId { get; set; }
 
         public virtual ICollection<Adopciones> Adopciones { get; set; }
-        public virtual Jaulas Jaulas { get; set; }
-        public virtual Razas Razas { get; set; }
+        public virtual Jaulas Jaula { get; set; }
+        public virtual Razas Raza { get; set; }
     }
 }

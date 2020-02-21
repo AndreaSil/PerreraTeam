@@ -15,10 +15,10 @@ namespace PerreraTeam.Controllers
     {
         private readonly IPerrosRepository _repository = null;
 
-        public PerrosController()
-        {
-            _repository = new PerrosRepository();
-        }
+        //public PerrosController()
+        //{
+        //    _repository = new PerrosRepository();
+        //}
 
         public PerrosController(IPerrosRepository repository)
         {
@@ -81,8 +81,8 @@ namespace PerreraTeam.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.IdJaula);
-            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.CodRazaId);
+            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.JaulaId);
+            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.RazaId);
             return View(perros);
         }
 
@@ -98,8 +98,8 @@ namespace PerreraTeam.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.IdJaula);
-            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.CodRazaId);
+            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.JaulaId);
+            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.RazaId);
             return View(perros);
         }
 
@@ -122,8 +122,8 @@ namespace PerreraTeam.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.IdJaula);
-            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.CodRazaId);
+            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.JaulaId);
+            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.RazaId);
             return View(perros);
         }
 

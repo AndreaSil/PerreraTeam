@@ -11,12 +11,12 @@ namespace PerreraTeam.Controllers
 {
     public class AdopcionesController : BaseController
     {
-        private IAdopcionesRepository _repository = null;
+        private readonly IAdopcionesRepository _repository = null;
 
-        public AdopcionesController()
-        {
-            _repository = new AdopcionesRepository();
-        }
+        //public AdopcionesController()
+        //{
+        //    _repository = new AdopcionesRepository();
+        //}
 
         public AdopcionesController(IAdopcionesRepository repository)
         {
