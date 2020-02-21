@@ -1,36 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using PerreraTeam.Domain;
 using PerreraTeam.Domain.Models;
+using PerreraTeam.Services;
 
 namespace PerreraTeam.Controllers
 {
     public class PerrosController : Controller
     {
-        private PerreraContext db = new PerreraContext();
+        private readonly IPerrosRepository _repository = null;
+
+        public PerrosController()
+        {
+            _repository = new PerrosRepository();
+        }
+
+        public PerrosController(IPerrosRepository repository)
+        {
+            _repository = repository;
+        }
 
         // GET: Perros
         public async Task<ActionResult> Index()
         {
-            var perros = db.Perros.Include(p => p.Jaulas).Include(p => p.Razas);
-            return View(await perros.ToListAsync());
+            return View(await _repository.GetAll().ConfigureAwait(false));
         }
 
         // GET: Perros/Details/5
         public async Task<ActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Perros perros = await db.Perros.FindAsync(id);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var perros = await _repository.GetElement(id).ConfigureAwait(false);
             if (perros == null)
             {
                 return HttpNotFound();
@@ -41,8 +45,8 @@ namespace PerreraTeam.Controllers
         // GET: Perros/Create
         public ActionResult Create()
         {
-            ViewBag.IdJaula = new SelectList(db.Jaulas, "Id", "NombreJaula");
-            ViewBag.CodRazaId = new SelectList(db.Razas, "Id", "Nombre");
+            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula");
+            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre");
             return View();
         }
 
@@ -51,34 +55,33 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Nombre,Chip,FechaNacimiento,CodRazaId,IdJaula")] Perros perros)
+        public async Task<ActionResult> Create([Bind(Include = "Nombre,Chip,FechaNacimiento,CodRazaId,IdJaula")] Perros perros)
         {
             if (ModelState.IsValid)
             {
-                db.Perros.Add(perros);
-                await db.SaveChangesAsync();
+                _repository.Insert(perros);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdJaula = new SelectList(db.Jaulas, "Id", "NombreJaula", perros.IdJaula);
-            ViewBag.CodRazaId = new SelectList(db.Razas, "Id", "Nombre", perros.CodRazaId);
+            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.IdJaula);
+            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.CodRazaId);
             return View(perros);
         }
 
         // GET: Perros/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Perros perros = await db.Perros.FindAsync(id);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var perros = await _repository.GetElement(id).ConfigureAwait(false);
             if (perros == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.IdJaula = new SelectList(db.Jaulas, "Id", "NombreJaula", perros.IdJaula);
-            ViewBag.CodRazaId = new SelectList(db.Razas, "Id", "Nombre", perros.CodRazaId);
+            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.IdJaula);
+            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.CodRazaId);
             return View(perros);
         }
 
@@ -87,27 +90,26 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Nombre,Chip,FechaNacimiento,CodRazaId,IdJaula")] Perros perros)
+        public async Task<ActionResult> Edit([Bind(Include = "Nombre,Chip,FechaNacimiento,CodRazaId,IdJaula")] Perros perros)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(perros).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _repository.Update(perros);
                 return RedirectToAction("Index");
             }
-            ViewBag.IdJaula = new SelectList(db.Jaulas, "Id", "NombreJaula", perros.IdJaula);
-            ViewBag.CodRazaId = new SelectList(db.Razas, "Id", "Nombre", perros.CodRazaId);
+            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.IdJaula);
+            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.CodRazaId);
             return View(perros);
         }
 
         // GET: Perros/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Perros perros = await db.Perros.FindAsync(id);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var perros = await _repository.GetElement(id).ConfigureAwait(false);
             if (perros == null)
             {
                 return HttpNotFound();
@@ -120,19 +122,10 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Perros perros = await db.Perros.FindAsync(id);
-            db.Perros.Remove(perros);
-            await db.SaveChangesAsync();
+            await _repository.Delete(id).ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }
+

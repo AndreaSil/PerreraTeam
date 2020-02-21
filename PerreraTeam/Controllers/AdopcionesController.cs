@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using PerreraTeam.Domain;
 using PerreraTeam.Domain.Models;
+using PerreraTeam.Exceptions;
 using PerreraTeam.Services;
 
 namespace PerreraTeam.Controllers
 {
-    public class AdopcionesController : Controller
+    public class AdopcionesController : BaseController
     {
         private IAdopcionesRepository _repository = null;
 
@@ -30,17 +25,24 @@ namespace PerreraTeam.Controllers
         // GET: Adopciones
         public async Task<ActionResult> Index()
         {
-            return View(await _repository.GetAll().ConfigureAwait(false));
+            try
+            {
+                return View(await _repository.GetAll().ConfigureAwait(false));
+            }
+            catch (Exception ex)
+            {
+                throw new AdopcionesException("Error al recuperar los registros", ex);
+            }
         }
 
         // GET: Adopciones/Details/5
-        public async Task<ActionResult> Details(int? idCliente, int? idEmpleado, int? idPerro, DateTime? fecha)
+        public async Task<ActionResult> Details(int? clienteId, int? empleadoId, int? perroId, DateTime? fechaEntrega)
         {
             //if (adopciones == null)
             //{
             //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             //}
-            var adopciones = await _repository.GetElement(idCliente, idEmpleado, idPerro, fecha).ConfigureAwait(false);
+            var adopciones = await _repository.GetElement(clienteId, empleadoId, perroId, fechaEntrega).ConfigureAwait(false);
             if (adopciones == null)
             {
                 return HttpNotFound();
@@ -66,8 +68,14 @@ namespace PerreraTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.Insert(adopciones);
-                await _repository.Save().ConfigureAwait(false);
+                try
+                {
+                    _repository.Insert(adopciones);
+                }
+                catch (DataException dex)
+                {
+                    throw new AdopcionesException("Error al guardar un nuevo elemento", dex);
+                }
                 return RedirectToAction("Index");
             }
 
@@ -78,13 +86,13 @@ namespace PerreraTeam.Controllers
         }
 
         // GET: Adopciones/Edit/5
-        public async Task<ActionResult> Edit(int? idCliente, int? idEmpleado, int? idPerro, DateTime? fecha)
+        public async Task<ActionResult> Edit(int? clienteId, int? empleadoId, int? perroId, DateTime? fechaEntrega)
         {
             //if (item == null)
             //{
             //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             //}
-            var adopciones = await _repository.GetElement(idCliente, idEmpleado, idPerro, fecha).ConfigureAwait(false);
+            var adopciones = await _repository.GetElement(clienteId, empleadoId, perroId, fechaEntrega).ConfigureAwait(false);
             if (adopciones == null)
             {
                 return HttpNotFound();
@@ -104,8 +112,14 @@ namespace PerreraTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.Update(adopciones);
-                await _repository.Save().ConfigureAwait(false);
+                try
+                {
+                    _repository.Update(adopciones);
+                }
+                catch (DataException dex)
+                {
+                    throw new AdopcionesException("Error al actualizar los datos", dex);
+                }
                 return RedirectToAction("Index");
             }
             ViewBag.ClienteId = new SelectList(_repository.GetContext().Clientes, "Id", "NombreCompleto", adopciones.ClienteId);
@@ -115,13 +129,13 @@ namespace PerreraTeam.Controllers
         }
 
         // GET: Adopciones/Delete/5
-        public async Task<ActionResult> Delete(int? idCliente, int? idEmpleado, int? idPerro, DateTime? fecha)
+        public async Task<ActionResult> Delete(int? clienteId, int? empleadoId, int? perroId, DateTime? fechaEntrega)
         {
             //if (adopciones == null)
             //{
             //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             //}
-            var adopciones = await _repository.GetElement(idCliente, idEmpleado, idPerro, fecha).ConfigureAwait(false);
+            var adopciones = await _repository.GetElement(clienteId, empleadoId, perroId, fechaEntrega).ConfigureAwait(false);
             if (adopciones == null)
             {
                 return HttpNotFound();
@@ -132,11 +146,18 @@ namespace PerreraTeam.Controllers
         // POST: Adopciones/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int? idCliente, int? idEmpleado, int? idPerro, DateTime? fecha)
+        public async Task<ActionResult> DeleteConfirmed(int? clienteId, int? empleadoId, int? perroId, DateTime? fechaEntrega)
         {
-            var adopciones = await _repository.GetElement(idCliente, idEmpleado, idPerro, fecha).ConfigureAwait(false);
-            _repository.Delete(adopciones);
-            await _repository.Save().ConfigureAwait(false);
+            var adopciones = await _repository.GetElement(clienteId, empleadoId, perroId, fechaEntrega).ConfigureAwait(false);
+            try
+            {
+                _repository.Delete(adopciones);
+            }
+            catch (Exception ex)
+            {
+                throw new AdopcionesException("Error al borrar el registro", ex);
+            }
+
             return RedirectToAction("Index");
         }
     }
