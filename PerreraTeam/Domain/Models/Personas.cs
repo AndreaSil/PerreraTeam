@@ -21,6 +21,7 @@ namespace PerreraTeam.Domain.Models
         [StringLength(125, ErrorMessage = "Tope máximo de carácteres permitido: 125")]
         public string Correo { get; set; }
 
+        [Required(ErrorMessage = "Campo obligatorio.")]
         [RegularExpression(@"(^[0-9]{8})([-]?)([A-Za-z]{1})$", ErrorMessage = "El DNI debe ser válido")]
         public string DNI { get; set; }
 

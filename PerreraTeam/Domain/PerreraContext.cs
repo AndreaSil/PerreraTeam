@@ -15,7 +15,6 @@ namespace PerreraTeam.Domain
         public DbSet<Jaulas> Jaulas { get; set; }
         public DbSet<Clientes> Clientes { get; set; }
         public DbSet<Empleados> Empleados { get; set; }
-        public DbSet<Personas> Personas { get; set; }
         public DbSet<Adopciones> Adopciones { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

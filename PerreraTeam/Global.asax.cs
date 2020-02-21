@@ -20,18 +20,7 @@ namespace PerreraTeam
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            //construyo el contenedor y registro las clases
-            var builder = new ContainerBuilder();
-            //builder.RegisterType<GenericRepository<Jaulas>>().As<IGenericRepository();
-            builder.RegisterType<AdopcionesRepository>().As<IAdopcionesRepository>().SingleInstance();
-            builder.RegisterType<PerrosRepository>().As<IPerrosRepository>().SingleInstance();
-
-            //Container = builder.Build();
-            ////dar ámbito de vida a la variable
-            //using (var scope = Container.BeginLifetimeScope())
-            //{
-               
-            //}
+            IoCConfig.Configure();
         }
     }
 }
