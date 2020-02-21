@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
-using System.Data.Entity;
-using System.Net;
-using System.Web.Mvc;
 using PerreraTeam.Domain;
 
 namespace PerreraTeam.Services
@@ -35,7 +30,7 @@ namespace PerreraTeam.Services
 
         public async Task<T> GetElement(params object[] keys)
         {
-            if (keys.Any(id => id == null))
+            if (keys.All(id => id == null))
             {
                 //log with HttpStatusCode.BadRequest
                 //ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
@@ -44,26 +39,31 @@ namespace PerreraTeam.Services
             return await Table.FindAsync(keys);
         }
 
-        public void Insert(T obj)
+        public async void Insert(T obj)
         {
             Table.Add(obj);
+            await Save();
         }
 
-        public void Update(T obj)
+        public async void Update(T obj)
         {
             Table.Attach(obj);
             DbContext.Entry(obj).State = EntityState.Modified;
+            await Save();
         }
 
-        public async void Delete(object id)
+        public async Task Delete(object id)
         {
-            var obj = await Task.Run(() => Table.Find(id)).ConfigureAwait(false);
-            await Task.Run(() => Table.Remove(obj));
+            var obj = await Table.FindAsync(id).ConfigureAwait(false);
+            if (obj != null)
+                await Task.Run(() => Table.Remove(obj));
+            await Save();
         }
 
-        public void Delete(T item)
+        public async void Delete(T item)
         {
             Table.Remove(item);
+            await Save();
         }
 
         public async Task Save()

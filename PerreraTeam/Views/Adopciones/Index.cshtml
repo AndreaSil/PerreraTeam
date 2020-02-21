@@ -12,17 +12,17 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Clientes.NombreCompleto)
+            @Html.DisplayNameFor(model => model.Clientes)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Empleados.NombreCompleto)
+            @Html.DisplayNameFor(model => model.Empleados)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Perros.Nombre)
         </th>
-        <td>
+        <th>
             @Html.DisplayNameFor(model => model.FechaEntrega)
-        </td>
+        </th>
         <th></th>
     </tr>
 
@@ -41,9 +41,9 @@
             @Html.DisplayFor(modelItem => item.FechaEntrega)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Edit", "Edit", new { clienteId = item.ClienteId, empleadoId = item.EmpleadoId, perroId = item.PerroId, fechaEntrega = item.FechaEntrega }) |
+            @Html.ActionLink("Details", "Details", new { clienteId = item.ClienteId, empleadoId = item.EmpleadoId, perroId = item.PerroId, fechaEntrega = item.FechaEntrega }) |
+            @Html.ActionLink("Delete", "Delete", new { clienteId = item.ClienteId, empleadoId = item.EmpleadoId, perroId = item.PerroId, fechaEntrega = item.FechaEntrega })
         </td>
     </tr>
 }

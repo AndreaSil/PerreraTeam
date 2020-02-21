@@ -1,35 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using PerreraTeam.Domain;
 using PerreraTeam.Domain.Models;
+using PerreraTeam.Services;
 
 namespace PerreraTeam.Controllers
 {
     public class ClientesController : Controller
     {
-        private PerreraContext db = new PerreraContext();
+        private IGenericRepository<Clientes> _repository = null;
+
+        public ClientesController()
+        {
+            _repository = new GenericRepository<Clientes>();
+        }
+
+        public ClientesController(IGenericRepository<Clientes> repository)
+        {
+            _repository = repository;
+        }
+
 
         // GET: Clientes
         public async Task<ActionResult> Index()
         {
-            return View(await db.Clientes.ToListAsync());
+            var model = await _repository.GetAll().ConfigureAwait(false);
+            return View(model);
         }
 
         // GET: Clientes/Details/5
         public async Task<ActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var clientes = await db.Clientes.FindAsync(id);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var clientes = await _repository.GetElement(id);
             if (clientes == null)
             {
                 return HttpNotFound();
@@ -48,26 +54,22 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,NombreCompleto,Telefono,Correo,DNI")] Clientes clientes)
+        public async Task<ActionResult> Create([Bind(Include = "NombreCompleto,Telefono,Correo,DNI")] Clientes clientes)
         {
-            if (ModelState.IsValid)
-            {
-                db.Personas.Add(clientes);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
+            if (!ModelState.IsValid) return View(clientes);
+            _repository.Insert(clientes);
+            return RedirectToAction("Index");
 
-            return View(clientes);
         }
 
         // GET: Clientes/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var clientes = await db.Clientes.FindAsync(id);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var clientes = await _repository.GetElement(id).ConfigureAwait(false);
             if (clientes == null)
             {
                 return HttpNotFound();
@@ -80,25 +82,21 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,NombreCompleto,Telefono,Correo,DNI")] Clientes clientes)
+        public async Task<ActionResult> Edit([Bind(Include = "NombreCompleto,Telefono,Correo,DNI")] Clientes clientes)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(clientes).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(clientes);
+            if (!ModelState.IsValid) return View(clientes);
+            _repository.Update(clientes);
+            return RedirectToAction("Index");
         }
 
         // GET: Clientes/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var clientes = await db.Clientes.FindAsync(id);
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            var clientes = await _repository.GetElement(id).ConfigureAwait(false);
             if (clientes == null)
             {
                 return HttpNotFound();
@@ -111,19 +109,8 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            var clientes = await db.Clientes.FindAsync(id);
-            db.Personas.Remove(clientes);
-            await db.SaveChangesAsync();
+            await _repository.Delete(id).ConfigureAwait(false);
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }
