@@ -1,13 +1,17 @@
-﻿using System.Linq;
+﻿using System;
+using System.Data;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using PerreraTeam.Domain.Models;
+using PerreraTeam.Exceptions;
 using PerreraTeam.Services;
+using PerreraTeam.Services.Repository;
 
 namespace PerreraTeam.Controllers
 {
-    public class PerrosController : Controller
+    public class PerrosController : BaseController
     {
         private readonly IPerrosRepository _repository = null;
 
@@ -24,7 +28,14 @@ namespace PerreraTeam.Controllers
         // GET: Perros
         public async Task<ActionResult> Index()
         {
-            return View(await _repository.GetAll().ConfigureAwait(false));
+            try
+            {
+                return View(await _repository.GetAll().ConfigureAwait(false));
+            }
+            catch (Exception ex)
+            {
+                throw new PerrosException("Error al recuperar todos los perros.", ex);
+            }
         }
 
         // GET: Perros/Details/5
@@ -59,7 +70,14 @@ namespace PerreraTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.Insert(perros);
+                try
+                {
+                    await _repository.Insert(perros).ConfigureAwait(false);
+                }
+                catch (DataException dex)
+                {
+                    throw new PerrosException("Error al crear un perro.", dex);
+                }
                 return RedirectToAction("Index");
             }
 
@@ -94,7 +112,14 @@ namespace PerreraTeam.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.Update(perros);
+                try
+                {
+                    await _repository.Update(perros).ConfigureAwait(false);
+                }
+                catch (DataException dex)
+                {
+                    throw new PerrosException("Error al editar un perro.", dex);
+                }
                 return RedirectToAction("Index");
             }
             ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.IdJaula);
@@ -122,7 +147,14 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            await _repository.Delete(id).ConfigureAwait(false);
+            try
+            {
+                await _repository.Delete(id).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new PerrosException("Error al eliminar un perro", ex);
+            }
             return RedirectToAction("Index");
         }
 

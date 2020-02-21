@@ -10,7 +10,6 @@ namespace PerreraTeam.ViewModels
 {
     public class PerrosViewModel
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Ha de indicar un nombre para el perro")]

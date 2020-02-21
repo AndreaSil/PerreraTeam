@@ -24,12 +24,12 @@ namespace PerreraTeam.Domain.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> FechaNacimiento { get; set; }
 
-        [ForeignKey("Razas")]
         [Required(ErrorMessage = "Código de raza del perro")]
+        [DisplayFormat(NullDisplayText = "-Desconocida-")]
         public Nullable<int> CodRazaId { get; set; }
 
-        [ForeignKey("Jaulas")]
         [Required(ErrorMessage = "Código de jaula")]
+        [DisplayFormat(NullDisplayText = "-Desconocida-")]
         public Nullable<int> IdJaula { get; set; }
 
         public virtual ICollection<Adopciones> Adopciones { get; set; }

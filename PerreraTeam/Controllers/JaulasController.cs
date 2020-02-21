@@ -1,11 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Data;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using PerreraTeam.Domain.Models;
-using PerreraTeam.Services;
+using PerreraTeam.Exceptions;
+using PerreraTeam.Services.Repository;
 
 namespace PerreraTeam.Controllers
 {
-    public class JaulasController : Controller
+    public class JaulasController : BaseController
     {
         private IGenericRepository<Jaulas> _repository = null;
 
@@ -23,8 +26,15 @@ namespace PerreraTeam.Controllers
         // GET: Jaulas
         public async Task<ActionResult> Index()
         {
-            var model = await _repository.GetAll().ConfigureAwait(false);
-            return View(model);
+            try
+            {
+                var model = await _repository.GetAll().ConfigureAwait(false);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                throw new JaulasException("Error al obtener todas las jaulas", ex);
+            }
         }
 
         // GET: Jaulas/Details/5
@@ -56,9 +66,15 @@ namespace PerreraTeam.Controllers
         public async Task<ActionResult> Create([Bind(Include = "NombreJaula")] Jaulas jaulas)
         {
             if (!ModelState.IsValid) return View(jaulas);
-            _repository.Insert(jaulas);
+            try
+            {
+                await _repository.Insert(jaulas).ConfigureAwait(false);
+            }
+            catch (DataException dex)
+            {
+                throw new JaulasException("Error al guardar una nueva jaula.", dex);
+            }
             return RedirectToAction("Index");
-
         }
 
         // GET: Jaulas/Edit/5
@@ -84,7 +100,14 @@ namespace PerreraTeam.Controllers
         public async Task<ActionResult> Edit([Bind(Include = "NombreJaula")] Jaulas jaulas)
         {
             if (!ModelState.IsValid) return View(jaulas);
-            _repository.Update(jaulas);
+            try
+            {
+                await _repository.Update(jaulas).ConfigureAwait(false);
+            }
+            catch (DataException dex)
+            {
+                throw new JaulasException("Error al editar una jaula.", dex);
+            }
             return RedirectToAction("Index");
         }
 
@@ -108,7 +131,14 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            await _repository.Delete(id).ConfigureAwait(false);
+            try
+            {
+                await _repository.Delete(id).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new JaulasException("Error al eliminar una jaula", ex);
+            }
             return RedirectToAction("Index");
         }
     }

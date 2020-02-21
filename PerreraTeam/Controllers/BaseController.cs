@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using NLog;
 using PerreraTeam.Domain.Models;
 using PerreraTeam.Services;
 using ExceptionContext = System.Web.Mvc.ExceptionContext;
@@ -10,6 +11,8 @@ namespace PerreraTeam.Controllers
     //public class BaseController<T> : Controller where T : class
     public class BaseController : Controller
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         //private IGenericRepository<T> _repository = null;
 
         //public BaseController()
@@ -25,7 +28,7 @@ namespace PerreraTeam.Controllers
         protected override void OnException(ExceptionContext context)
         {
             // Catch invalid operation exception
-            if (!(context.Exception is InvalidOperationException)) return;
+            //if (!(context.Exception is InvalidOperationException)) return;
             var controllerName = context.RouteData.Values["controller"].ToString();
             var actionName = context.RouteData.Values["action"].ToString();
             var model = new HandleErrorInfo(context.Exception, controllerName, actionName);
@@ -37,6 +40,7 @@ namespace PerreraTeam.Controllers
                 //diagnostic information
                 TempData = context.Controller.TempData
             };
+            Logger.Error(context.Exception.InnerException, context.Exception.Message);
             context.Result = result;
         }
     }

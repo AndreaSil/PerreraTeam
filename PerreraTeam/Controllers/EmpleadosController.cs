@@ -1,14 +1,15 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data;
 using System.Threading.Tasks;
-using System.Net;
 using System.Web.Mvc;
-using PerreraTeam.Domain;
 using PerreraTeam.Domain.Models;
+using PerreraTeam.Exceptions;
 using PerreraTeam.Services;
+using PerreraTeam.Services.Repository;
 
 namespace PerreraTeam.Controllers
 {
-    public class EmpleadosController : Controller
+    public class EmpleadosController : BaseController
     {
         private IGenericRepository<Empleados> _repository = null;
 
@@ -26,8 +27,15 @@ namespace PerreraTeam.Controllers
         // GET: Empleados
         public async Task<ActionResult> Index()
         {
-            var model = await _repository.GetAll().ConfigureAwait(false);
-            return View(model);
+            try
+            {
+                var model = await _repository.GetAll().ConfigureAwait(false);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                throw new EmpleadosException("Error al obtener todos los empleados", ex);
+            }
         }
 
         // GET: Empleados/Details/5
@@ -59,8 +67,14 @@ namespace PerreraTeam.Controllers
         public async Task<ActionResult> Create([Bind(Include = "NombreCompleto,Telefono,Correo,DNI")] Empleados empleados)
         {
             if (!ModelState.IsValid) return View(empleados);
-            _repository.Insert(empleados);
-            await _repository.Save().ConfigureAwait(false);
+            try
+            {
+                await _repository.Insert(empleados).ConfigureAwait(false);
+            }
+            catch (DataException dex)
+            {
+                throw new EmpleadosException("Error al guardar un nuevo cliente.", dex);
+            }
             return RedirectToAction("Index");
 
         }
@@ -87,12 +101,16 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "NombreCompleto,Telefono,Correo,DNI")] Empleados empleados)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(empleados);
+            try
             {
-                _repository.Update(empleados);
-                return RedirectToAction("Index");
+                await _repository.Update(empleados).ConfigureAwait(false);
             }
-            return View(empleados);
+            catch (DataException dex)
+            {
+                throw new EmpleadosException("Error al editar un nuevo cliente.", dex);
+            }
+            return RedirectToAction("Index");
         }
 
         // GET: Empleados/Delete/5
@@ -115,7 +133,14 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            await _repository.Delete(id).ConfigureAwait(false);
+            try
+            {
+                await _repository.Delete(id).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new EmpleadosException("Error al eliminar un empleado", ex);
+            }
             return RedirectToAction("Index");
         }
     }

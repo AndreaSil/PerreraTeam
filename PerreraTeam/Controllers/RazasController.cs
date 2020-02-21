@@ -1,11 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Data;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using PerreraTeam.Domain.Models;
+using PerreraTeam.Exceptions;
 using PerreraTeam.Services;
+using PerreraTeam.Services.Repository;
 
 namespace PerreraTeam.Controllers
 {
-    public class RazasController : Controller
+    public class RazasController : BaseController
     {
         private readonly IGenericRepository<Razas> _repository = null;
 
@@ -23,8 +27,15 @@ namespace PerreraTeam.Controllers
         // GET: Razas
         public async Task<ActionResult> Index()
         {
-            var model = await _repository.GetAll().ConfigureAwait(false);
-            return View(model);
+            try
+            {
+                var model = await _repository.GetAll().ConfigureAwait(false);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                throw new JaulasException("Error al obtener todas las razas", ex);
+            }
         }
 
         // GET: Razas/Details/5
@@ -56,7 +67,14 @@ namespace PerreraTeam.Controllers
         public async Task<ActionResult> Create([Bind(Include = "Nombre")] Razas razas)
         {
             if (!ModelState.IsValid) return View(razas);
-            _repository.Insert(razas);
+            try
+            {
+                await _repository.Insert(razas).ConfigureAwait(false);
+            }
+            catch (DataException dex)
+            {
+                throw new RazasException("Error al crear una raza", dex);
+            }
             return RedirectToAction("Index");
         }
 
@@ -83,7 +101,15 @@ namespace PerreraTeam.Controllers
         public async Task<ActionResult> Edit([Bind(Include = "Nombre")] Razas razas)
         {
             if (!ModelState.IsValid) return View(razas);
-            _repository.Update(razas);
+            try
+            {
+                await _repository.Update(razas).ConfigureAwait(false);
+            }
+            catch (DataException dex)
+            {
+                throw new RazasException("Error al editar una raza", dex);
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -94,7 +120,7 @@ namespace PerreraTeam.Controllers
             //{
             //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             //}
-            var razas = await _repository.GetElement(id);
+            var razas = await _repository.GetElement(id).ConfigureAwait(false);
             if (razas == null)
             {
                 return HttpNotFound();
@@ -107,7 +133,14 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            await _repository.Delete(id).ConfigureAwait(false);
+            try
+            {
+                await _repository.Delete(id).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new RazasException("Error al eliminar una raza", ex);
+            }
             return RedirectToAction("Index");
         }
 

@@ -1,12 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Data;
+using System.Threading.Tasks;
 using System.Net;
 using System.Web.Mvc;
 using PerreraTeam.Domain.Models;
+using PerreraTeam.Exceptions;
 using PerreraTeam.Services;
+using PerreraTeam.Services.Repository;
 
 namespace PerreraTeam.Controllers
 {
-    public class ClientesController : Controller
+    public class ClientesController : BaseController
     {
         private IGenericRepository<Clientes> _repository = null;
 
@@ -24,8 +28,15 @@ namespace PerreraTeam.Controllers
         // GET: Clientes
         public async Task<ActionResult> Index()
         {
-            var model = await _repository.GetAll().ConfigureAwait(false);
-            return View(model);
+            try
+            {
+                var model = await _repository.GetAll().ConfigureAwait(false);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                throw new ClientesException("Error al obtener todos los clientes", ex);
+            }
         }
 
         // GET: Clientes/Details/5
@@ -35,7 +46,7 @@ namespace PerreraTeam.Controllers
             //{
             //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             //}
-            var clientes = await _repository.GetElement(id);
+            var clientes = await _repository.GetElement(id).ConfigureAwait(false);
             if (clientes == null)
             {
                 return HttpNotFound();
@@ -57,7 +68,15 @@ namespace PerreraTeam.Controllers
         public async Task<ActionResult> Create([Bind(Include = "NombreCompleto,Telefono,Correo,DNI")] Clientes clientes)
         {
             if (!ModelState.IsValid) return View(clientes);
-            _repository.Insert(clientes);
+            try
+            {
+                await _repository.Insert(clientes).ConfigureAwait(false);
+            }
+            catch (DataException dex)
+            {
+                throw new ClientesException("Error al guardar un nuevo cliente.",dex);
+            }
+            
             return RedirectToAction("Index");
 
         }
@@ -85,7 +104,14 @@ namespace PerreraTeam.Controllers
         public async Task<ActionResult> Edit([Bind(Include = "NombreCompleto,Telefono,Correo,DNI")] Clientes clientes)
         {
             if (!ModelState.IsValid) return View(clientes);
-            _repository.Update(clientes);
+            try
+            {
+                await _repository.Insert(clientes).ConfigureAwait(false);
+            }
+            catch (DataException dex)
+            {
+                throw new ClientesException("Error al editar un cliente.",dex);
+            }
             return RedirectToAction("Index");
         }
 
@@ -109,7 +135,14 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            await _repository.Delete(id).ConfigureAwait(false);
+            try
+            {
+                await _repository.Delete(id).ConfigureAwait(false);
+            }
+            catch(Exception ex)
+            {
+                throw new ClientesException("Error al eliminar un cliente", ex);
+            }
             return RedirectToAction("Index");
         }
     }

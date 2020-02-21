@@ -35,9 +35,9 @@ namespace PerreraTeam.Domain
             new Perros(){Nombre = "Scar",Chip = "000002bbbb",FechaNacimiento = new DateTime(2012,04,14),Razas = razas[1],Jaulas = jaulas[0]},
             new Perros(){Nombre = "Pere",Chip = "000003cccc",FechaNacimiento = new DateTime(2013,05,15),Razas = razas[2],Jaulas = jaulas[1]},
             new Perros(){Nombre = "Soso",Chip = "000004dddd",FechaNacimiento = new DateTime(2014,06,16),Razas = razas[3],Jaulas = jaulas[1]},
-            new Perros(){Nombre = "Roi",Chip = "000005eeee",FechaNacimiento = new DateTime(2014,06,16),Razas = razas[3],Jaulas = jaulas[1]},
-            new Perros(){Nombre = "Lobo",Chip = "000006ffff",FechaNacimiento = new DateTime(2014,06,16),Razas = razas[1],Jaulas = jaulas[0]},
-            new Perros(){Nombre = "Linda",Chip = "000007gggg",FechaNacimiento = new DateTime(2014,06,16),Razas = razas[0],Jaulas = jaulas[0]},
+            new Perros(){Nombre = "Roi",Chip = "000005eeee",FechaNacimiento = new DateTime(2015,12,10),Razas = razas[3],Jaulas = jaulas[1]},
+            new Perros(){Nombre = "Lobo",Chip = "000006ffff",FechaNacimiento = new DateTime(2016,01,26),Razas = razas[1],Jaulas = jaulas[0]},
+            new Perros(){Nombre = "Linda",Chip = "000007gggg",FechaNacimiento = new DateTime(2017,06,16),Razas = razas[0],Jaulas = jaulas[0]}
             };
             perros.ForEach(p => context.Perros.Add(p));
             context.SaveChanges();

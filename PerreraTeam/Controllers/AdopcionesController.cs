@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using PerreraTeam.Domain.Models;
 using PerreraTeam.Exceptions;
 using PerreraTeam.Services;
+using PerreraTeam.Services.Repository;
 
 namespace PerreraTeam.Controllers
 {
@@ -31,7 +32,7 @@ namespace PerreraTeam.Controllers
             }
             catch (Exception ex)
             {
-                throw new AdopcionesException("Error al recuperar los registros", ex);
+                throw new AdopcionesException("Error al recuperar las adopciones", ex);
             }
         }
 
@@ -70,11 +71,11 @@ namespace PerreraTeam.Controllers
             {
                 try
                 {
-                    _repository.Insert(adopciones);
+                    await _repository.Insert(adopciones).ConfigureAwait(false);
                 }
                 catch (DataException dex)
                 {
-                    throw new AdopcionesException("Error al guardar un nuevo elemento", dex);
+                    throw new AdopcionesException("Error al guardar una nueva adopción", dex);
                 }
                 return RedirectToAction("Index");
             }
@@ -114,11 +115,11 @@ namespace PerreraTeam.Controllers
             {
                 try
                 {
-                    _repository.Update(adopciones);
+                    await _repository.Update(adopciones).ConfigureAwait(false);
                 }
                 catch (DataException dex)
                 {
-                    throw new AdopcionesException("Error al actualizar los datos", dex);
+                    throw new AdopcionesException("Error al actualizar una adopción", dex);
                 }
                 return RedirectToAction("Index");
             }
@@ -151,11 +152,11 @@ namespace PerreraTeam.Controllers
             var adopciones = await _repository.GetElement(clienteId, empleadoId, perroId, fechaEntrega).ConfigureAwait(false);
             try
             {
-                _repository.Delete(adopciones);
+                await _repository.Delete(adopciones).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                throw new AdopcionesException("Error al borrar el registro", ex);
+                throw new AdopcionesException("Error al borrar una adopción", ex);
             }
 
             return RedirectToAction("Index");
