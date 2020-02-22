@@ -21,14 +21,15 @@ namespace PerreraTeam.Domain.Models
         public string Chip { get; set; }
 
         [DataType(DataType.Date)]
+        [DisplayName("Fecha Nacimiento")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> FechaNacimiento { get; set; }
 
-        [Required(ErrorMessage = "Código de raza del perro")]
+        //[Required(ErrorMessage = "Código de raza del perro")]
         [DisplayFormat(NullDisplayText = "-Desconocida-")]
         public Nullable<int> RazaId { get; set; }
 
-        [Required(ErrorMessage = "Código de jaula")]
+        //[Required(ErrorMessage = "Código de jaula")]
         [DisplayFormat(NullDisplayText = "-Desconocida-")]
         public Nullable<int> JaulaId { get; set; }
 

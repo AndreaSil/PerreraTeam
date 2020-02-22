@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,6 +10,7 @@ namespace PerreraTeam.Domain.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [DisplayName("Nombre completo")]
         [Required(ErrorMessage = "Debe de rellenar el nombre")]
         [StringLength(50, ErrorMessage = "Tope máximo de carácteres permitido: 50")]
         public string NombreCompleto { get; set; }

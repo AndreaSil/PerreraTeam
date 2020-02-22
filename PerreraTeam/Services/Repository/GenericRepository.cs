@@ -52,7 +52,7 @@ namespace PerreraTeam.Services.Repository
             await Save().ConfigureAwait(false);
         }
 
-        public async Task Delete(object id)
+        public async Task Delete(params object[] id)
         {
             var obj = await Table.FindAsync(id).ConfigureAwait(false);
             if (obj != null)
@@ -60,11 +60,11 @@ namespace PerreraTeam.Services.Repository
             await Save().ConfigureAwait(false);
         }
 
-        public async Task Delete(T item)
-        {
-            Table.Remove(item);
-            await Save().ConfigureAwait(false);
-        }
+        //public async Task Delete(T item)
+        //{
+        //    Table.Remove(item);
+        //    await Save().ConfigureAwait(false);
+        //}
 
         public async Task Save()
         {

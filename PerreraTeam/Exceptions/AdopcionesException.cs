@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace PerreraTeam.Exceptions
 {
     [Serializable]
-    internal class AdopcionesException : Exception
+    public class AdopcionesException : Exception
     {
         public AdopcionesException()
         {

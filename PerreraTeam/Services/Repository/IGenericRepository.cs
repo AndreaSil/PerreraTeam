@@ -9,8 +9,7 @@ namespace PerreraTeam.Services.Repository
         Task<T> GetElement(params object[] keys);
         Task Insert(T obj);
         Task Update(T obj);
-        Task Delete(object id);
-        Task Delete(T obj);
+        Task Delete(params object[] keys);
         Task Save();
     }
 }

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using PerreraTeam.Domain.Models;
 using PerreraTeam.Exceptions;
-using PerreraTeam.Services;
 using PerreraTeam.Services.Repository;
 
 namespace PerreraTeam.Controllers
@@ -56,8 +55,8 @@ namespace PerreraTeam.Controllers
         // GET: Perros/Create
         public ActionResult Create()
         {
-            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula");
-            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre");
+            ViewBag.JaulaId = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula");
+            ViewBag.RazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre");
             return View();
         }
 
@@ -66,7 +65,7 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Nombre,Chip,FechaNacimiento,CodRazaId,IdJaula")] Perros perros)
+        public async Task<ActionResult> Create([Bind(Include = "Nombre,Chip,FechaNacimiento,RazaId,JaulaId")] Perros perros)
         {
             if (ModelState.IsValid)
             {
@@ -81,8 +80,8 @@ namespace PerreraTeam.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.JaulaId);
-            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.RazaId);
+            ViewBag.JaulaId = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.JaulaId);
+            ViewBag.RazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.RazaId);
             return View(perros);
         }
 
@@ -98,8 +97,8 @@ namespace PerreraTeam.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.JaulaId);
-            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.RazaId);
+            ViewBag.JaulaId = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.JaulaId);
+            ViewBag.RazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.RazaId);
             return View(perros);
         }
 
@@ -108,7 +107,7 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Nombre,Chip,FechaNacimiento,CodRazaId,IdJaula")] Perros perros)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Nombre,Chip,FechaNacimiento,RazaId,JaulaId")] Perros perros)
         {
             if (ModelState.IsValid)
             {
@@ -122,8 +121,8 @@ namespace PerreraTeam.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewBag.IdJaula = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.JaulaId);
-            ViewBag.CodRazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.RazaId);
+            ViewBag.JaulaId = new SelectList(_repository.GetContext().Jaulas, "Id", "NombreJaula", perros.JaulaId);
+            ViewBag.RazaId = new SelectList(_repository.GetContext().Razas, "Id", "Nombre", perros.RazaId);
             return View(perros);
         }
 

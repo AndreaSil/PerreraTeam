@@ -149,10 +149,9 @@ namespace PerreraTeam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int? clienteId, int? empleadoId, int? perroId, DateTime? fechaEntrega)
         {
-            var adopciones = await _repository.GetElement(clienteId, empleadoId, perroId, fechaEntrega).ConfigureAwait(false);
             try
             {
-                await _repository.Delete(adopciones).ConfigureAwait(false);
+                await _repository.Delete(clienteId, empleadoId, perroId, fechaEntrega).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

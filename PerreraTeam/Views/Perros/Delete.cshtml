@@ -11,21 +11,6 @@
     <h4>Perros</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Jaula.NombreJaula)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Jaula.NombreJaula)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Raza.Nombre)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Raza.Nombre)
-        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Nombre)
@@ -49,6 +34,22 @@
 
         <dd>
             @Html.DisplayFor(model => model.FechaNacimiento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Jaula.NombreJaula)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Jaula.NombreJaula)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Raza.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Raza.Nombre)
         </dd>
 
     </dl>

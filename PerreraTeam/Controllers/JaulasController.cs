@@ -12,10 +12,10 @@ namespace PerreraTeam.Controllers
     {
         private IGenericRepository<Jaulas> _repository = null;
 
-        public JaulasController()
-        {
-            _repository = new GenericRepository<Jaulas>();
-        }
+        //public JaulasController()
+        //{
+        //    _repository = new GenericRepository<Jaulas>();
+        //}
 
         public JaulasController(IGenericRepository<Jaulas> repository)
         {
@@ -97,7 +97,7 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "NombreJaula")] Jaulas jaulas)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,NombreJaula")] Jaulas jaulas)
         {
             if (!ModelState.IsValid) return View(jaulas);
             try

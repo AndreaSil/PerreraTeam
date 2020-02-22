@@ -13,10 +13,10 @@ namespace PerreraTeam.Controllers
     {
         private readonly IGenericRepository<Razas> _repository = null;
 
-        public RazasController()
-        {
-            _repository = new GenericRepository<Razas>();
-        }
+        //public RazasController()
+        //{
+        //    _repository = new GenericRepository<Razas>();
+        //}
 
         public RazasController(IGenericRepository<Razas> repository)
         {
@@ -98,7 +98,7 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Nombre")] Razas razas)
+        public async Task<ActionResult> Edit([Bind(Include = "Id, Nombre")] Razas razas)
         {
             if (!ModelState.IsValid) return View(razas);
             try

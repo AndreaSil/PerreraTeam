@@ -13,10 +13,10 @@ namespace PerreraTeam.Controllers
     {
         private IGenericRepository<Empleados> _repository = null;
 
-        public EmpleadosController()
-        {
-            _repository = new GenericRepository<Empleados>();
-        }
+        //public EmpleadosController()
+        //{
+        //    _repository = new GenericRepository<Empleados>();
+        //}
 
         public EmpleadosController(IGenericRepository<Empleados> repository)
         {
@@ -99,7 +99,7 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "NombreCompleto,Telefono,Correo,DNI")] Empleados empleados)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,NombreCompleto,Telefono,Correo,DNI")] Empleados empleados)
         {
             if (!ModelState.IsValid) return View(empleados);
             try

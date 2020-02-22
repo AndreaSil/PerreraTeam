@@ -14,10 +14,10 @@ namespace PerreraTeam.Controllers
     {
         private IGenericRepository<Clientes> _repository = null;
 
-        public ClientesController()
-        {
-            _repository = new GenericRepository<Clientes>();
-        }
+        //public ClientesController()
+        //{
+        //    _repository = new GenericRepository<Clientes>();
+        //}
 
         public ClientesController(IGenericRepository<Clientes> repository)
         {
@@ -101,12 +101,12 @@ namespace PerreraTeam.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "NombreCompleto,Telefono,Correo,DNI")] Clientes clientes)
-        {
+        public async Task<ActionResult> Edit([Bind(Include = "Id,NombreCompleto,Telefono,Correo,DNI")] Clientes clientes)
+        {//Hay que pasar TODOS los campos en el bind porque si no luego no tendremos todos los datos al recoger la entidad en el post.
             if (!ModelState.IsValid) return View(clientes);
             try
             {
-                await _repository.Insert(clientes).ConfigureAwait(false);
+                await _repository.Update(clientes).ConfigureAwait(false);
             }
             catch (DataException dex)
             {
