@@ -1,9 +1,5 @@
-﻿using System;
-using System.Web.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using System.Web.Mvc;
 using NLog;
-using PerreraTeam.Domain.Models;
-using PerreraTeam.Services;
 using ExceptionContext = System.Web.Mvc.ExceptionContext;
 
 namespace PerreraTeam.Controllers

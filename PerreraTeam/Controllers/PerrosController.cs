@@ -157,6 +157,11 @@ namespace PerreraTeam.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<ActionResult> PerrosPorRaza()
+        {
+            return View(await _repository.PerrosPorRaza().ConfigureAwait(false));
+        }
+
     }
 }
 

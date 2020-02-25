@@ -23,6 +23,6 @@ namespace PerreraTeam.Domain
             modelBuilder.Entity<Adopciones>().HasKey(c => new {c.ClienteId, c.EmpleadoId, c.PerroId,c.FechaEntrega}); // Clave primaria de Adopciones
         }
 
-        
+        public System.Data.Entity.DbSet<PerreraTeam.ViewModels.PerrosPorRazaViewModel> PerrosPorRazaViewModels { get; set; }
     }
 }

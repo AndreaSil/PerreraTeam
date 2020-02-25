@@ -1,6 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using System.Linq.Expressions;
+using System.Web;
+using AutoMapper;
+using PerreraTeam.Domain;
 using PerreraTeam.Domain.Models;
 using PerreraTeam.ViewModels;
+
 
 namespace PerreraTeam.Services.AutoMapper
 {
